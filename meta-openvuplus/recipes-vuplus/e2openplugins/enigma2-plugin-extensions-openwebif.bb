@@ -6,11 +6,11 @@ LIC_FILES_CHKSUM = "file://README;firstline=10;lastline=12;md5=9c14f792d0aeb54e1
 DEPENDS = "python-cheetah-native"
 RDEPENDS_${PN} = "python-cheetah python-json python-unixadmin python-misc python-pyopenssl aio-grab"
 
-SRCREV_pn-${PN}="c30a9aefcf87387e90f0ddbac61ef1aada8cbd6c"
+SRCREV_pn-${PN}="662ce65b1bf7ff46c6afece25f0a642443f8fab3"
 inherit gitpkgv
 PV = "0.1+git${SRCPV}"
 PKGV = "0.1+git${GITPKGV}"
-PR = "r0.82"
+PR = "r0.83"
 
 require openplugins.inc
 
@@ -29,7 +29,7 @@ do_install() {
 python do_package_prepend () {
 	boxtypes = [
 		('bm750', 'duo.jpg', 'vu_normal.png'),
-		('vuduo2', 'duo2.jpg', 'vu_normal.png'),
+		('vuduo2', 'duo2.jpg', 'vu_duo2.png'),
 		('vusolo', 'solo.jpg', 'vu_normal.png'),
 		('vusolo2', 'solo2.jpg', 'vu_normal.png'),
 		('vusolose', 'solose.jpg', 'vu_normal.png'),
