@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://README;firstline=10;lastline=12;md5=9c14f792d0aeb54e1
 DEPENDS = "python-cheetah-native"
 RDEPENDS_${PN} = "python-cheetah python-json python-unixadmin python-misc python-pyopenssl aio-grab"
 
-SRCREV_pn-${PN}="662ce65b1bf7ff46c6afece25f0a642443f8fab3"
+SRCREV_pn-${PN}="d84307958746e6a597b43defe5bd1cb78fd745c8"
 inherit gitpkgv
 PV = "0.1+git${SRCPV}"
 PKGV = "0.1+git${GITPKGV}"
