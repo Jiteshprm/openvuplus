@@ -5,7 +5,7 @@ LICENSE = "CLOSED"
 DEPENDS = "mpfr gmp"
 RDEPENDS = "sysfsutils"
 
-SRC_DATE = "20150106_0"
+SRC_DATE = "20150410_1"
 
 PR = "r2_${SRC_DATE}"
 SRC_URI = ""
@@ -57,6 +57,15 @@ do_install() {
 	mv ${S}/dfb/usr/lib/* ${D}/usr/lib/
 }
 
+do_install_append() {
+	GST_REQUIRED_VERSION=$(pkg-config --list-all | grep gstreamer-[0-9].* | awk -F "-| " '{print $2}')
+	GST_VERSION=$(pkg-config --modversion "gstreamer-$GST_REQUIRED_VERSION >= $GST_REQUIRED_VERSION")
+	mv ${D}/usr/local/hbb-browser/root/jsplugins/ooif-gst-$GST_VERSION.so ${D}/usr/local/hbb-browser/root/jsplugins/ooif.so
+	rm -f ${D}/usr/local/hbb-browser/root/jsplugins/ooif-gst*.so
+	mv ${D}/usr/local/hbb-browser/root/video/videobackend-gst-$GST_VERSION.so ${D}/usr/local/hbb-browser/root/video/videobackend.so
+	rm -f ${D}/usr/local/hbb-browser/root/video/videobackend-gst*.so
+}
+
 package_do_shlibs_append() {
 	deps = "${PKGDEST}/${PN}.shlibdeps"
 	tmp = "/tmp/.${PN}.shlibdeps"
@@ -74,6 +83,6 @@ PACKAGES = "${PN}"
 
 FILES_${PN} = "/"
 
-SRC_URI[md5sum] = "531bb6c69f682b04b563a17160773014"
-SRC_URI[sha256sum] = "3f8f885b3679db592acd09120dc8f29911bf34ac811df41e6abb87440e394b94"
+SRC_URI[md5sum] = "d29ca7a0b7f6c9071300cd8dc66f1278"
+SRC_URI[sha256sum] = "4c08c9e3605eb6f4b7d3c3e49f59291883e89701794e5dec92e4085106182742"
 
