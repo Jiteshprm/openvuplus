@@ -6,7 +6,7 @@ RDEPENDS_${PN} = "ncurses"
 LICENSE = "CLOSED"
 
 PV = "3.8"
-PR = "r1"
+PR = "r2"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI = "http://archive.vuplus.com/download/utils/vuplus-blindscan-utils-${PV}.tar.bz2"
@@ -22,13 +22,6 @@ PLUGABLE_MODEL_BLINDSCAN = " \
 	ssh108_t2_scan \
 	tt3l10 \
 	tt3l10_t2_scan \
-"
-PLUGABLE_SOLOSE_BLINDSCAN = " \
-	tda1002x \
-	vuplus_blindscan \
-	vuplus_6211_blindscan \
-	ssh108 \
-	ssh108_t2_scan \
 "
 
 do_install() {
@@ -65,7 +58,7 @@ do_install_vuduo2() {
 
 do_install_vusolose() {
 	install -d "${D}/${bindir}"
-	for f in ${PLUGABLE_SOLOSE_BLINDSCAN}; do
+	for f in ${PLUGABLE_MODEL_BLINDSCAN}; do
 		install -m 0755 "${S}/$f" "${D}/${bindir}"
 	done
 }
