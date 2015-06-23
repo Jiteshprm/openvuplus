@@ -7,6 +7,7 @@ DEPENDS = "jpeg libungif libmad libpng libsigc++-1.2 gettext-native \
 	libfribidi libxmlccwrap libdreamdvd gstreamer gst-plugin-dvbmediasink \
 	gst-plugins-bad gst-plugins-good gst-plugins-ugly python-wifi \
 	hostap-daemon bridge-utils ntfs-3g dosfstools util-linux \
+	satipclient \
 "
 
 RDEPENDS_GST= "gst-plugins-base-decodebin gst-plugins-base-decodebin2 gst-plugins-base-app gst-plugins-bad-fragmented \
@@ -88,11 +89,13 @@ RDEPENDS_enigma2-plugin-systemplugins-netdrive = "curlftpfs kernel-module-fuse l
 RDEPENDS_enigma2-plugin-systemplugins-backupsuitehdd = "mtd-utils-mkfs.ubifs mtd-utils-nanddump mtd-utils-ubinize"
 RDEPENDS_enigma2-plugin-systemplugins-backupsuiteusb = "enigma2-plugin-extensions-backupsuitehdd"
 
+RDEPENDS_enigma2-plugin-extensions-satipclient = "satipclient"
+
 DEPENDS += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugles2" , "", d)}"
 RDEPENDS_append_vuplus += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugles2" , "", d)}"
 
 PN = "enigma2"
-PR = "r99"
+PR = "r100"
 
 SRCDATE = "20121128"
 #SRCDATE is NOT used by git to checkout a specific revision

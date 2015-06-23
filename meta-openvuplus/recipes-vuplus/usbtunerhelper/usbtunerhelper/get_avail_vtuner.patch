@@ -1,0 +1,188 @@
+diff --git a/usbtunerhelper.c b/usbtunerhelper.c
+index 77b8728..7906f9b 100644
+--- a/usbtunerhelper.c
++++ b/usbtunerhelper.c
+@@ -94,7 +94,7 @@ struct vtuner_adapter
+ 
+ struct vtuner_adapter adapters[MAX_ADAPTERS];
+ int adaptercount = 0;
+-int vtunercount = 0;
++int available_vtuner = 0;
+ 
+ int running = 1;
+ void sigint_handler(int sig)
+@@ -166,31 +166,6 @@ int scan_adapters()
+ 		
+ 	}
+ 
+-	dirvtun = opendir(VTUNER_PATH);
+-	if (dirvtun)
+-	{
+-		while ((edirvtun = readdir(dirvtun)) != NULL)
+-		{
+-			if (strlen(edirvtun->d_name) < 7) continue;
+-			if (!strncmp(edirvtun->d_name, "vtuner", 6)) vtunercount++;
+-		}
+-		closedir(dirvtun);
+-	}
+-
+-
+-	for (i = 0; i < adaptercount; i++)
+-	{
+-		if (i < vtunercount)
+-		{
+-			adapters[i].vtunerindex = i;
+-			printf("usb device %s (adapter%d) assigned to vtuner%d\n", adapters[i].name, adapters[i].index, i);
+-		}
+-		else
+-		{
+-			adapters[i].vtunerindex = -1;
+-			printf("usb device %s (adapter%d) not assigned\n", adapters[i].name, adapters[i].index);
+-		}
+-	}
+ 	return adaptercount;
+ 
+ }
+@@ -448,25 +423,112 @@ error:
+ 	return NULL;
+ }
+ 
++int get_avail_vtuner()
++{
++	int total_vtuner = 0;
++	int reserved_vtuner = 0;
++	char filename[32];
++
++	const char* conf = "/etc/vtuner.conf";
++	FILE *fp;
++
++	/* total vtuner */
++	while(1)
++	{
++		sprintf(filename, "/dev/misc/vtuner%d", total_vtuner);
++		if (access(filename, F_OK) < 0 ) break;
++		total_vtuner++;
++	}
++
++	/* reserved vtuner */
++	fp = fopen(conf, "rt");
++	if (fp)
++	{
++		char line[256];
++		const char *vtuner_type = "vtuner_type:";
++		const char *usb_tuner = "usb_tuner";
++
++		while (!feof(fp))
++		{
++			if (!fgets(line, sizeof(line), fp))
++				break;
++
++			char *p = strstr(line, vtuner_type);
++			if (p != NULL)
++			{
++				p += strlen(vtuner_type);
++				if (strncmp(p, usb_tuner, strlen(usb_tuner)))
++				{
++					reserved_vtuner ++;
++				}
++			}
++		}
++		fclose(fp);
++	}
++	return total_vtuner - reserved_vtuner;
++}
++
++int get_vtuner(int id)
++{
++	char filename[256];
++	int vtuner_fd = -1;
++	int vtuner_idx = 0;
++
++	struct vtuner_adapter *adapter = &adapters[id];
++
++	adapter->vtuner = -1;
++	adapter->vtunerindex = -1;
++
++	if (!available_vtuner)
++		return -1;
++
++	while (vtuner_fd < 0)
++	{
++		sprintf(filename, "/dev/misc/vtuner%d", vtuner_idx);
++		if (access(filename, F_OK) < 0) break;
++
++		printf("open vtuner %s\n", filename);
++		vtuner_fd = open(filename, O_RDWR);
++
++		if (vtuner_fd < 0)
++		{
++			vtuner_idx++;
++		}
++	}
++
++	if (vtuner_fd < 0)
++		return -1;
++
++	adapter->vtuner = vtuner_fd;
++	adapter->vtunerindex = vtuner_idx;
++	available_vtuner--;
++
++	return 0;
++}
++
+ int init_adapter(int id)
+ {
+ 	char type[8];
+ 	struct dmx_pes_filter_params filter;
+ 	struct dvb_frontend_info fe_info;
+-	char frontend_filename[256], demux_filename[256], vtuner_filename[256];
++	char frontend_filename[256], demux_filename[256];
+ 
+ 	struct vtuner_adapter *adapter = &adapters[id];
+ 
+ 	adapter->eventthread = 0;
+ 	adapter->pumpthread = 0;
+ 
++	get_vtuner(id);
++
++	if (adapter->vtunerindex == -1)
++		goto error;
++
+ 	printf("linking adapter%d/frontend0 to vtuner%d\n", adapter->index, adapter->vtunerindex);
+ 
+ 	sprintf(frontend_filename, "/dev/dvb/adapter%d/frontend0", adapter->index);
+ 	sprintf(demux_filename, "/dev/dvb/adapter%d/demux0", adapter->index);
+-	sprintf(vtuner_filename, "/dev/misc/vtuner%d", adapter->vtunerindex);
+ 
+-	adapter->frontend = adapter->demux = adapter->vtuner = -1;
++	adapter->frontend = adapter->demux = -1;
+ 
+ 	adapter->frontend = open(frontend_filename, O_RDWR);
+ 	if (adapter->frontend < 0)
+@@ -482,13 +544,6 @@ int init_adapter(int id)
+ 		goto error;
+ 	}
+ 
+-	adapter->vtuner = open(vtuner_filename, O_RDWR);
+-	if (adapter->vtuner < 0)
+-	{
+-		perror(vtuner_filename);
+-		goto error;
+-	}
+-
+ 	if (ioctl(adapter->frontend, FE_GET_INFO, &fe_info) < 0)
+ 	{
+ 		perror("FE_GET_INFO");
+@@ -635,9 +690,11 @@ int main(int argc, char *argv[])
+ 		sleep(scan_inverval);
+ 	}
+ 
++	available_vtuner = get_avail_vtuner();
++
+ 	for (i = 0; i < adaptercount; i++)
+ 	{
+-		if (adapters[i].vtunerindex >= 0) init_adapter(i);
++		init_adapter(i);
+ 	}
+ 
+ 	for (i = 0; i < adaptercount; i++)
