@@ -95,7 +95,7 @@ DEPENDS += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugle
 RDEPENDS_append_vuplus += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugles2" , "", d)}"
 
 PN = "enigma2"
-PR = "r100"
+PR = "r101"
 
 SRCDATE = "20121128"
 #SRCDATE is NOT used by git to checkout a specific revision
