@@ -4,7 +4,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${THISDIR}/${PN}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 PV = "1.0+git${SRCPV}"
-PR = "r5"
+PR = "r6"
 SRC_REV = ""
 
 SRC_URI = " \
@@ -12,6 +12,7 @@ SRC_URI = " \
 	file://no_usb_device.patch;striplevel=1 \
 	file://fix_set_delsys.patch \
 	file://get_avail_vtuner.patch \
+	file://setfrontend_ofdm_fecauto.patch \
 	file://${PN}.sh \
 	"
 

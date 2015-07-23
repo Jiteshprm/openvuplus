@@ -1,0 +1,33 @@
+diff --git a/usbtunerhelper.c b/usbtunerhelper.c
+index 7906f9b..5bdd359 100644
+--- a/usbtunerhelper.c
++++ b/usbtunerhelper.c
+@@ -90,6 +90,7 @@ struct vtuner_adapter
+ 	int firstdata;
+ 	pthread_t eventthread, pumpthread;
+ 	__u16 pidlist[30];
++	fe_type_t fe_type;
+ };
+ 
+ struct vtuner_adapter adapters[MAX_ADAPTERS];
+@@ -294,6 +295,11 @@ void *event_proc(void *ptr)
+ 			{
+ 			case MSG_SET_FRONTEND:
+ 				adapter->firstdata = 1;
++				if ((adapter->fe_type == FE_OFDM) && (message.body.dvb_frontend_parameters.u.ofdm.code_rate_HP != FEC_AUTO))
++				{
++					message.body.dvb_frontend_parameters.u.ofdm.code_rate_HP = FEC_AUTO;
++					printf("[FE_SET_FRONTEND] OFDM CODE RATE HP SETTED AUTO\n", adapter->vtunerindex);
++				}
+ 				ioctl(adapter->frontend, FE_SET_FRONTEND, &message.body.dvb_frontend_parameters);
+ 				break;
+ 			case MSG_GET_FRONTEND:
+@@ -585,6 +591,8 @@ int init_adapter(int id)
+ 		goto error;
+ 	}
+ 
++	adapter->fe_type = fe_info.type;
++
+ 	ioctl(adapter->vtuner, VTUNER_SET_NAME, adapter->name);
+ 	ioctl(adapter->vtuner, VTUNER_SET_TYPE, type);
+ 	ioctl(adapter->vtuner, VTUNER_SET_FE_INFO, &fe_info);
