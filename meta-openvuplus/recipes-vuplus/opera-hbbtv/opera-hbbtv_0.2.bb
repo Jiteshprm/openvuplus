@@ -2,7 +2,7 @@ DESCRIPTION = "opera-hbbtv"
 PRIORITY = "required"
 LICENSE = "CLOSED"
 
-DEPENDS = "mpfr gmp"
+DEPENDS = "mpfr gmp gstreamer"
 RDEPENDS = "sysfsutils"
 
 SRC_DATE = "20150622_0"
