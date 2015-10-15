@@ -7,7 +7,7 @@ DEPENDS = "jpeg libungif libmad libpng libsigc++-1.2 gettext-native \
 	libfribidi libxmlccwrap libdreamdvd gstreamer gst-plugin-dvbmediasink \
 	gst-plugins-bad gst-plugins-good gst-plugins-ugly python-wifi \
 	hostap-daemon bridge-utils ntfs-3g dosfstools util-linux \
-	satipclient \
+	satipclient vuplus-3gcommand vuplus-dlnaserver\
 "
 
 RDEPENDS_GST= "gst-plugins-base-decodebin gst-plugins-base-decodebin2 gst-plugins-base-app gst-plugins-bad-fragmented \
@@ -18,6 +18,7 @@ RDEPENDS_GST= "gst-plugins-base-decodebin gst-plugins-base-decodebin2 gst-plugin
 		gst-plugins-good-souphttpsrc gst-plugins-ugly-mpegaudioparse gst-plugins-base-subparse \
         	gst-plugins-good-apetag gst-plugins-good-icydemux gst-plugins-good-autodetect gst-plugins-good-flv \
 		gst-plugins-bad-mms gst-plugins-ugly-asf gst-plugins-bad-faad \
+		gst-plugin-subsink \
 "
 
 RDEPENDS_${PN} = "python-codecs python-core python-lang python-re python-threading \
@@ -72,7 +73,7 @@ RDEPENDS_enigma2-plugin-systemplugins-wirelessaccesspoint = "hostap-daemon bridg
 RDEPENDS_enigma2-plugin-extensions-streamtv = "librtmp0 gst-plugins-bad-rtmp "
 
 DEPENDS += "djmount minidlna"
-RDEPENDS_enigma2-plugin-extensions-dlnaserver = "minidlna "
+RDEPENDS_enigma2-plugin-extensions-dlnaserver = "minidlna vuplus-dlnaserver"
 RDEPENDS_enigma2-plugin-extensions-dlnabrowser = "djmount kernel-module-fuse fuse-utils"
 
 DEPENDS += "opera-hbbtv"
@@ -81,6 +82,7 @@ RDEPENDS_enigma2-plugin-extensions-hbbtv = "opera-hbbtv"
 DEPENDS += "wvdial wvstreams ppp usb-modeswitch usb-modeswitch-data"
 RDEPENDS_enigma2-plugin-systemplugins-3gmodemmanager = "ppp usb-modeswitch usb-modeswitch-data wvdial wvstreams \
 	kernel-module-ppp-async kernel-module-ppp-deflate kernel-module-ppp-synctty kernel-module-ppp-generic kernel-module-usbserial \
+	vuplus-3gcommand \
 "
 
 RDEPENDS_enigma2-plugin-systemplugins-devicemanager = "util-linux-blkid ntfs-3g dosfstools"
@@ -95,7 +97,7 @@ DEPENDS += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugle
 RDEPENDS_append_vuplus += "${@base_contains("VUPLUS_FEATURES", "uianimation", "libgles libvugles2" , "", d)}"
 
 PN = "enigma2"
-PR = "r101"
+PR = "r102"
 
 SRCDATE = "20121128"
 #SRCDATE is NOT used by git to checkout a specific revision
@@ -114,10 +116,8 @@ SRCREV = ""
 SRC_URI = "git://code.vuplus.com/git/dvbapp.git;protocol=http;branch=${BRANCH};tag=${SRCREV} \
            file://enigma2_vuplus_skin.patch;patch=1;pnum=1 \
            file://enigma2_vuplus_mediaplayer.patch;patch=1;pnum=1 \
-	   file://enigma2_vuplus_mediaplayer_subtitle.patch;patch=1;pnum=1 \
            file://enigma2_vuplus_remove_dreambox_enigma.patch;patch=1;pnum=1 \
            file://enigma2_vuplus_vfd_mode.patch;patch=1;pnum=1 \
-           file://enigma2_vuplus_addlibpythondeps.patch;patch=1;pnum=1 \
 	   file://enigma2_vuplus_pluginbrowser.patch;striplevel=1 \
            file://enigma2_vuplus_proc_oom_score_adj.patch;striplevel=1 \
            file://enigma2_vuplus_fix_standby_name.patch \
@@ -190,6 +190,7 @@ do_compile_prepend_vuplus() {
 }
 
 EXTRA_OECONF = " \
+	--enable-dependency-tracking \
 	${@base_contains("VUPLUS_FEATURES", "display-text-vfd", "--with-display-text-vfd" , "", d)} \
 	${@base_contains("VUPLUS_FEATURES", "display-graphic-vfd", "--with-display-graphic-vfd" , "", d)} \
 	${@base_contains("VUPLUS_FEATURES", "right-half-vfd-skin", "--with-set-right-half-vfd-skin" , "", d)} \
