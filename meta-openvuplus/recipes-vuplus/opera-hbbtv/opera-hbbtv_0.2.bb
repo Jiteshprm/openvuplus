@@ -5,7 +5,7 @@ LICENSE = "CLOSED"
 DEPENDS = "mpfr gmp gstreamer"
 RDEPENDS = "sysfsutils"
 
-SRC_DATE = "20150622_0"
+SRC_DATE = "20151208_0"
 
 PR = "r2_${SRC_DATE}"
 SRC_URI = ""
@@ -58,6 +58,10 @@ do_install() {
 }
 
 do_install_append() {
+	OPENSSL_VERSION=$(pkg-config --modversion "openssl")
+	mv ${D}/usr/local/hbb-browser/lib/hbbtv-ssl-$OPENSSL_VERSION.app ${D}/usr/local/hbb-browser/lib/hbbtv.app
+	rm -f ${D}/usr/local/hbb-browser/lib/hbbtv-ssl*.app
+
 	GST_REQUIRED_VERSION=$(pkg-config --list-all | grep gstreamer-[0-9].* | awk -F "-| " '{print $2}')
 	GST_VERSION=$(pkg-config --modversion "gstreamer-$GST_REQUIRED_VERSION >= $GST_REQUIRED_VERSION")
 	mv ${D}/usr/local/hbb-browser/root/jsplugins/ooif-gst-$GST_VERSION.so ${D}/usr/local/hbb-browser/root/jsplugins/ooif.so
@@ -83,6 +87,6 @@ PACKAGES = "${PN}"
 
 FILES_${PN} = "/"
 
-SRC_URI[md5sum] = "3dbefb3fce773077fd3604c4666f0c3e"
-SRC_URI[sha256sum] = "909dd2f98d322b46a97d298e0dc0ab54a47538a791be3bf40ef9314df0f0aa44"
+SRC_URI[md5sum] = "79d76c05abd1e8a18866243ebfb370ea"
+SRC_URI[sha256sum] = "a3ff18c90a5d20e60cd1c169d87c103388a18432ee7ebea347346f0293ba5aca"
 
