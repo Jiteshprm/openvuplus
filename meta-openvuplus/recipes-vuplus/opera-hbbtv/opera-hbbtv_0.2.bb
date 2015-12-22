@@ -5,7 +5,7 @@ LICENSE = "CLOSED"
 DEPENDS = "mpfr gmp gstreamer"
 RDEPENDS = "sysfsutils"
 
-SRC_DATE = "20151213_0"
+SRC_DATE = "20151222_0"
 
 PR = "r2_${SRC_DATE}"
 SRC_URI = ""
@@ -83,6 +83,6 @@ PACKAGES = "${PN}"
 
 FILES_${PN} = "/"
 
-SRC_URI[md5sum] = "0b68208fa2a78b53379645df0cff02a6"
-SRC_URI[sha256sum] = "aec425837a2db13700541d2d295504e33d0df0f1d8bd34218853078ba4f6e856"
+SRC_URI[md5sum] = "bc52fd1fe1ace5bf64b265f27525f25d"
+SRC_URI[sha256sum] = "4f8051b136d15a91b22cd618b1d3d0f131600229ff3c129c0b0a766bc1dc49f9"
 
