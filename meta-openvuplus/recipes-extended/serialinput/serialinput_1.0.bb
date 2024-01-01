@@ -3,15 +3,15 @@
 # Yocto Project Development Manual.
 #
 
-DESCRIPTION = "Serialinput"
-SECTION = "Serialinput"
+DESCRIPTION = "serialinput"
+SECTION = "serialinput"
 DEPENDS = ""
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=68b329da9893e34099c7d8ad5cb9c940"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRCREV = "8208df00574d7d5a5ff553930e2a08cd3c242919"
+SRCREV = "8f318446dff4aa64422bc46ed786a8ec9965068f"
 SRC_URI = "git://github.com/Jiteshprm/serial_input.git;protocol=https;branch=master"
 
 S = "${WORKDIR}/git"
