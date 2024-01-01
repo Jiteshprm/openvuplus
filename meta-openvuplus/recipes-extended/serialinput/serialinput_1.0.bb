@@ -7,7 +7,7 @@ DESCRIPTION = "serialinput"
 SECTION = "serialinput"
 DEPENDS = ""
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=68b329da9893e34099c7d8ad5cb9c940"
+LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=68b329da9893e34099c7d8ad5cb9c940"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
