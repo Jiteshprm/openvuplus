@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=68b329da9893e34099c7d8ad5cb9c9
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 SRCREV = "8f318446dff4aa64422bc46ed786a8ec9965068f"
-SRC_URI = "git://github.com/Jiteshprm/serial_input.git;protocol=https;branch=master"
+SRC_URI = "git://github.com/Jiteshprm/serial_input.git;branch=master"
 
 S = "${WORKDIR}/git"
 
