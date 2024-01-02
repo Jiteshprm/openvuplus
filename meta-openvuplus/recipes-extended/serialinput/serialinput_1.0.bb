@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=68b329da9893e34099c7d8ad5cb9c940"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-SRCREV = "5b405434290fb50c6ecd9a3368e6d6146d298fa3"
+SRCREV = "ced76b5de9930f40eb69d91f10a761384cc9410b"
 SRC_URI = "git://github.com/Jiteshprm/serial_input.git;protocol=https;branch=samsung_ir_vusolo2"
 
 S = "${WORKDIR}/git"
